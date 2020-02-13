@@ -34,8 +34,12 @@ Data Migration:
 At any time, a key should be replicated in two slave servers. So whenever a new Server comes up or a Server goes down, data
 must be migrated to ensure the required redundancy.
 Case 1: When a new Server registers:-
-
-
+1. predecessor, successor and successor of successor are found using hashed id of new registered slave server.
+2. successor updates its 'own' table by removing keys hashed between predecessor and new registered server.
+3. these removed keys are filled in 'previous' table of successor server.
+4. removed keys are filled in 'own' table of newly registered slave server.
+5. newly registered slave server updates its 'previous' table with 'own' table of predecessor.
+6. successor of successor updates its 'previous' table with 'own' table of successor.
 
 Case 2: When a Servers goes down:-
 1. the successor, predecessor and successor of successor is found out using the hashed id of the dead slave which is passed
